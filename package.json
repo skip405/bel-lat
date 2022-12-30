@@ -11,6 +11,9 @@
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
+  "engines": {
+    "node": ">=12"
+  },
   "bugs": {
     "url" : "https://github.com/skip405/bel-lat/issues",
     "email" : "skip405@gmail.com"
