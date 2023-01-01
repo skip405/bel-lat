@@ -81,12 +81,10 @@ const processChar = (char, nextChar, prevChar, style, replacement) => {
 }
 
 const processReturnValue = (value, char, nextChar, style) => {
-  const upperCaseChar = char.toUpperCase();
-
   if( 'slugify' === style ) {
     return value.toLowerCase();
   } else {
-    if( char === upperCaseChar && char !== char.toLowerCase() ) {
+    if( char === char.toUpperCase() && char !== char.toLowerCase() ) {
       if( '' !== nextChar && nextChar === nextChar.toUpperCase() ) {
         return value.toUpperCase();
       }
@@ -99,7 +97,7 @@ const processReturnValue = (value, char, nextChar, style) => {
 }
 
 export default function belLat(string, options) {
-  if ( typeof string !== 'string' ) {
+  if ( 'string' !== typeof string ) {
     throw new TypeError('Needs a string');
   }
 
@@ -234,8 +232,7 @@ export default function belLat(string, options) {
     const resultForWord = [];
 
     for( let i = 0; i < word.length; i++ ) {
-      const lowerCaseChar = word[i].toLowerCase();
-      const replacement = replacements.get(lowerCaseChar);
+      const replacement = replacements.get(word[i].toLowerCase());
 
       if( ! replacement ) {
         resultForWord.push( word[i] );
