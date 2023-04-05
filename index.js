@@ -1,29 +1,27 @@
-import slugify from '@sindresorhus/slugify';
-
 const processSpecialCase = (char, nextChar, prevChar, style, replacement) => {
-  let variant = 'regular';
+  let index = 0;
 
   switch( char.toLowerCase() ) {
     case 'ў' :
-      variant = 'with-breve';
+      index = 1;
 
-      if( 'slugify' === style ) {
-        variant = 'regular';
+      if( 'geo-2023' === style ) {
+        index = 2;
       }
 
       break;
     case 'л' :
-      if( 'geographic' === style ) {
+      if( 'geo-2000' === style ) {
         if( ['ь'].includes(nextChar.toLowerCase()) ) {
-          variant = 'with-acute';
+          index = 2;
         } else {
-          variant = 'regular';
+          index = 0;
         }
       } else if( 'lacinka' === style ) {
         if( ['е', 'ё', 'ю', 'я', 'ь'].includes(nextChar.toLowerCase()) ) {
-          variant = 'regular';
+          index = 0;
         } else {
-          variant = 'with-stroke';
+          index = 1;
         }
       }
 
@@ -32,10 +30,8 @@ const processSpecialCase = (char, nextChar, prevChar, style, replacement) => {
     case 'ё' :
     case 'ю' :
     case 'я' :
-      variant = 'with-i';
-
       if( ['а', 'і', 'о', 'у', 'ы', 'ў', 'э', 'ь', '’', '‘'].includes(prevChar.toLowerCase()) || '' === prevChar ) {
-        variant = 'with-j';
+        index = 1;
       }
 
       break;
@@ -44,26 +40,26 @@ const processSpecialCase = (char, nextChar, prevChar, style, replacement) => {
     case 'с' :
     case 'ц' :
       if( ['ь'].includes(nextChar.toLowerCase()) ) {
-        variant = 'with-acute';
+        index = 1;
       }
-      if( 'slugify' === style ) {
-        variant = 'regular';
+      if( 'geo-2023' === style ) {
+        index = 0;
       }
 
       break;
     case 'ж' :
     case 'ч' :
     case 'ш' :
-      variant = 'with-caron';
+      index = 1;
 
-      if( 'slugify' === style ) {
-        variant = 'regular';
+      if( 'geo-2023' === style ) {
+        index = 2;
       }
 
       break;
   }
 
-  return processReturnValue(replacement[variant], char, nextChar, style);
+  return processReturnValue(replacement[index], char, nextChar, style);
 }
 
 const processChar = (char, nextChar, prevChar, style, replacement) => {
@@ -77,20 +73,22 @@ const processChar = (char, nextChar, prevChar, style, replacement) => {
     return processSpecialCase(char, nextChar, prevChar, style, replacement);
   }
 
-  return processReturnValue(replacement.regular, char, nextChar, style);
+  let replacementValue = replacement[0];
+
+  if( 'geo-2023' === style && replacement[1] ) {
+    replacementValue = replacement[1];
+  }
+
+  return processReturnValue(replacementValue, char, nextChar, style);
 }
 
 const processReturnValue = (value, char, nextChar, style) => {
-  if( 'slugify' === style ) {
-    return value.toLowerCase();
-  } else {
-    if( char === char.toUpperCase() && char !== char.toLowerCase() ) {
-      if( '' !== nextChar && nextChar === nextChar.toUpperCase() ) {
-        return value.toUpperCase();
-      }
-
-      return `${value[0].toUpperCase()}${value.slice(1)}`;
+  if( char === char.toUpperCase() && char !== char.toLowerCase() ) {
+    if( '' !== nextChar && nextChar === nextChar.toUpperCase() ) {
+      return value.toUpperCase();
     }
+
+    return `${value[0].toUpperCase()}${value.slice(1)}`;
   }
 
   return value;
@@ -108,123 +106,45 @@ export default function belLat(string, options) {
   };
 
   const replacements = new Map([
-    ['а', {
-      'regular': 'a',
-    }],
-    ['б', {
-      'regular': 'b',
-    }],
-    ['в', {
-      'regular': 'v',
-    }],
-    ['г', {
-      'regular': 'h',
-    }],
-    ['ґ', {
-      'regular': 'g',
-    }],
-    ['д', {
-      'regular': 'd',
-    }],
-    ['е', {
-      'with-i': 'ie',
-      'with-j': 'je',
-    }],
-    ['ё', {
-      'with-i': 'io',
-      'with-j': 'jo',
-    }],
-    ['ж', {
-      'regular': 'z',
-      'with-caron': 'ž',
-    }],
-    ['з', {
-      'regular': 'z',
-      'with-acute': 'ź',
-    }],
-    ['і', {
-      'regular': 'i',
-    }],
-    ['й', {
-      'regular': 'j',
-    }],
-    ['к', {
-      'regular': 'k',
-    }],
-    ['л', {
-      'regular': 'l',
-      'with-stroke': 'ł',
-      'with-acute': 'ĺ',
-    }],
-    ['м', {
-      'regular': 'm',
-    }],
-    ['н', {
-      'regular': 'n',
-      'with-acute': 'ń',
-    }],
-    ['о', {
-      'regular': 'o',
-    }],
-    ['п', {
-      'regular': 'p',
-    }],
-    ['р', {
-      'regular': 'r',
-    }],
-    ['с', {
-      'regular': 's',
-      'with-acute': 'ś',
-    }],
-    ['т', {
-      'regular': 't',
-    }],
-    ['у', {
-      'regular': 'u',
-    }],
-    ['ў', {
-      'regular': 'u',
-      'with-breve': 'ŭ',
-    }],
-    ['ф', {
-      'regular': 'f',
-    }],
-    ['х', {
-      'regular': 'ch',
-    }],
-    ['ц', {
-      'regular': 'c',
-      'with-acute': 'ć',
-    }],
-    ['ч', {
-      'regular': 'c',
-      'with-caron': 'č',
-    }],
-    ['ш', {
-      'regular': 's',
-      'with-caron': 'š',
-    }],
+    ['а', ['a']],
+    ['б', ['b']],
+    ['в', ['v']],
+    ['г', ['h', 'g']],
+    ['ґ', ['g']],
+    ['д', ['d']],
+    ['е', ['ie', 'je']],
+    ['ё', ['io', 'jo']],
+    ['ж', ['z', 'ž', 'zh']],
+    ['з', ['z', 'ź']],
+    ['і', ['i']],
+    ['й', ['j']],
+    ['к', ['k']],
+    ['л', ['l', 'ł', 'ĺ']],
+    ['м', ['m']],
+    ['н', ['n', 'ń']],
+    ['о', ['o']],
+    ['п', ['p']],
+    ['р', ['r']],
+    ['с', ['s', 'ś']],
+    ['т', ['t']],
+    ['у', ['u']],
+    ['ў', ['u', 'ŭ', 'w']],
+    ['ф', ['f']],
+    ['х', ['ch', 'h']],
+    ['ц', ['c', 'ć']],
+    ['ч', ['c', 'č', 'ch']],
+    ['ш', ['s', 'š', 'sh']],
     ['ь', '_omitted'],
-    ['ы', {
-      'regular': 'y',
-    }],
-    ['э', {
-      'regular': 'e',
-    }],
-    ['ю', {
-      'with-i': 'iu',
-      'with-j': 'ju',
-    }],
-    ['я', {
-      'with-i': 'ia',
-      'with-j': 'ja'
-    }],
+    ['ы', ['y']],
+    ['э', ['e']],
+    ['ю', ['iu', 'ju']],
+    ['я', ['ia', 'ja']],
     ['’', '_omitted'],
     ['‘', '_omitted'],
     ...options.customReplacements
   ]);
 
-  const transformedString = string.split(' ').map( word => {
+  return string.split(' ').map( word => {
     if( '' === word ) {
       return '';
     }
@@ -248,6 +168,4 @@ export default function belLat(string, options) {
 
     return resultForWord.join('');
   } ).join(' ');
-
-  return 'slugify' === options.style ? slugify( transformedString ) : transformedString;
 }

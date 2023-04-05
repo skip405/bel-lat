@@ -2,6 +2,10 @@ import belLat from './index';
 
 test('tests it works', () => {
   expect(belLat("прывітанне, сусвет")).toBe("pryvitannie, susviet");
+
+  expect(belLat("Шчучыншчына", { style: 'lacinka' })).toBe("Ščučynščyna");
+  expect(belLat("Шчучыншчына", { style: 'geo-2000' })).toBe("Ščučynščyna");
+  expect(belLat("Шчучыншчына", { style: 'geo-2023' })).toBe("Shchuchynshchyna");
 });
 
 describe('Letters', () => {
@@ -64,10 +68,39 @@ describe('Letters', () => {
   });
 });
 
+describe('Instruction on transliteration of geographical names (2023)', () => {
+  test('Lowercase', () => {
+    expect(belLat("г", { style: 'geo-2023' })).toBe("g");
+    expect(belLat("ж", { style: 'geo-2023' })).toBe("zh");
+    expect(belLat("ў", { style: 'geo-2023' })).toBe("w");
+    expect(belLat("х", { style: 'geo-2023' })).toBe("h");
+    expect(belLat("ч", { style: 'geo-2023' })).toBe("ch");
+    expect(belLat("ш", { style: 'geo-2023' })).toBe("sh");
+  });
+
+  test('Uppercase', () => {
+    expect(belLat("Г", { style: 'geo-2023' })).toBe("G");
+    expect(belLat("Ж", { style: 'geo-2023' })).toBe("Zh");
+    expect(belLat("Ў", { style: 'geo-2023' })).toBe("W");
+    expect(belLat("Х", { style: 'geo-2023' })).toBe("H");
+    expect(belLat("Ч", { style: 'geo-2023' })).toBe("Ch");
+    expect(belLat("Ш", { style: 'geo-2023' })).toBe("Sh");
+  });
+
+  test('If next letter is uppercase (capslock)', () => {
+    expect(belLat("ГА", { style: 'geo-2023' })).toBe("GA");
+    expect(belLat("ЖБ", { style: 'geo-2023' })).toBe("ZHB");
+    expect(belLat("ЎВ", { style: 'geo-2023' })).toBe("WV");
+    expect(belLat("ХА", { style: 'geo-2023' })).toBe("HA");
+    expect(belLat("ЧА", { style: 'geo-2023' })).toBe("CHA");
+    expect(belLat("ША", { style: 'geo-2023' })).toBe("SHA");
+  });
+});
+
 describe('Special cases', () => {
   describe('Е, Ё, Ю, Я', () => {
     describe('Render with J', () => {
-      describe('In the beginning of a word', () => {
+      describe('At the beginning of a word', () => {
         test('Lowercase', () => {
           expect(belLat("е")).toBe("je");
           expect(belLat("ё")).toBe("jo");
@@ -319,18 +352,37 @@ describe('Special cases', () => {
       expect(belLat("Сь")).toBe("Ś");
       expect(belLat("Ць")).toBe("Ć");
     });
+
+    test('As per instruction on transliteration of geographical names (2023)', () => {
+      expect(belLat("з", { style: 'geo-2023' })).toBe("z");
+      expect(belLat("н", { style: 'geo-2023' })).toBe("n");
+      expect(belLat("с", { style: 'geo-2023' })).toBe("s");
+      expect(belLat("ц", { style: 'geo-2023' })).toBe("c");
+
+      expect(belLat("З", { style: 'geo-2023' })).toBe("Z");
+      expect(belLat("Н", { style: 'geo-2023' })).toBe("N");
+      expect(belLat("С", { style: 'geo-2023' })).toBe("S");
+      expect(belLat("Ц", { style: 'geo-2023' })).toBe("C");
+    });
   });
 
   describe('Л', () => {
-    describe('As per the Instruction on transliteration of geographical names', () => {
+    describe('As per the Instruction on transliteration of geographical names (2000)', () => {
       test('Renders without an acute sign', () => {
-        expect(belLat("л", { style: 'geographic' })).toBe("l");
-        expect(belLat("Л", { style: 'geographic' })).toBe("L");
+        expect(belLat("л", { style: 'geo-2000' })).toBe("l");
+        expect(belLat("Л", { style: 'geo-2000' })).toBe("L");
       });
 
       test('Renders with an acute sign before Ь', () => {
-        expect(belLat("ль", { style: 'geographic' })).toBe("ĺ");
-        expect(belLat("Ль", { style: 'geographic' })).toBe("Ĺ");
+        expect(belLat("ль", { style: 'geo-2000' })).toBe("ĺ");
+        expect(belLat("Ль", { style: 'geo-2000' })).toBe("Ĺ");
+      });
+    });
+
+    describe('As per the Instruction on transliteration of geographical names (2023)', () => {
+      test('Renders as l', () => {
+        expect(belLat("л", { style: 'geo-2023' })).toBe("l");
+        expect(belLat("Л", { style: 'geo-2023' })).toBe("L");
       });
     });
 
@@ -356,93 +408,6 @@ describe('Special cases', () => {
     });
   });
 });
-
-describe('Slugify', () => {
-  test('Renders without diacritical signs', () => {
-    expect(belLat("ж", { style: 'slugify' })).toBe("z");
-    expect(belLat("з", { style: 'slugify' })).toBe("z");
-    expect(belLat("л", { style: 'slugify' })).toBe("l");
-    expect(belLat("н", { style: 'slugify' })).toBe("n");
-    expect(belLat("с", { style: 'slugify' })).toBe("s");
-    expect(belLat("ў", { style: 'slugify' })).toBe("u");
-    expect(belLat("ц", { style: 'slugify' })).toBe("c");
-    expect(belLat("ч", { style: 'slugify' })).toBe("c");
-    expect(belLat("ш", { style: 'slugify' })).toBe("s");
-  });
-
-  test('Renders letters as lowercase', () => {
-    expect(belLat("а", { style: 'slugify' })).toBe("a");
-    expect(belLat("б", { style: 'slugify' })).toBe("b");
-    expect(belLat("в", { style: 'slugify' })).toBe("v");
-    expect(belLat("г", { style: 'slugify' })).toBe("h");
-    expect(belLat("ґ", { style: 'slugify' })).toBe("g");
-    expect(belLat("д", { style: 'slugify' })).toBe("d");
-    expect(belLat("е", { style: 'slugify' })).toBe("je");
-    expect(belLat("ё", { style: 'slugify' })).toBe("jo");
-    expect(belLat("ж", { style: 'slugify' })).toBe("z");
-    expect(belLat("з", { style: 'slugify' })).toBe("z");
-    expect(belLat("і", { style: 'slugify' })).toBe("i");
-    expect(belLat("й", { style: 'slugify' })).toBe("j");
-    expect(belLat("к", { style: 'slugify' })).toBe("k");
-    expect(belLat("л", { style: 'slugify' })).toBe("l");
-    expect(belLat("м", { style: 'slugify' })).toBe("m");
-    expect(belLat("н", { style: 'slugify' })).toBe("n");
-    expect(belLat("о", { style: 'slugify' })).toBe("o");
-    expect(belLat("п", { style: 'slugify' })).toBe("p");
-    expect(belLat("р", { style: 'slugify' })).toBe("r");
-    expect(belLat("с", { style: 'slugify' })).toBe("s");
-    expect(belLat("т", { style: 'slugify' })).toBe("t");
-    expect(belLat("у", { style: 'slugify' })).toBe("u");
-    expect(belLat("ў", { style: 'slugify' })).toBe("u");
-    expect(belLat("ф", { style: 'slugify' })).toBe("f");
-    expect(belLat("х", { style: 'slugify' })).toBe("ch");
-    expect(belLat("ц", { style: 'slugify' })).toBe("c");
-    expect(belLat("ч", { style: 'slugify' })).toBe("c");
-    expect(belLat("ш", { style: 'slugify' })).toBe("s");
-    expect(belLat("ы", { style: 'slugify' })).toBe("y");
-    expect(belLat("э", { style: 'slugify' })).toBe("e");
-    expect(belLat("ю", { style: 'slugify' })).toBe("ju");
-    expect(belLat("я", { style: 'slugify' })).toBe("ja");
-
-    expect(belLat("А", { style: 'slugify' })).toBe("a");
-    expect(belLat("Б", { style: 'slugify' })).toBe("b");
-    expect(belLat("В", { style: 'slugify' })).toBe("v");
-    expect(belLat("Г", { style: 'slugify' })).toBe("h");
-    expect(belLat("Ґ", { style: 'slugify' })).toBe("g");
-    expect(belLat("Д", { style: 'slugify' })).toBe("d");
-    expect(belLat("Е", { style: 'slugify' })).toBe("je");
-    expect(belLat("Ё", { style: 'slugify' })).toBe("jo");
-    expect(belLat("Ж", { style: 'slugify' })).toBe("z");
-    expect(belLat("З", { style: 'slugify' })).toBe("z");
-    expect(belLat("І", { style: 'slugify' })).toBe("i");
-    expect(belLat("Й", { style: 'slugify' })).toBe("j");
-    expect(belLat("К", { style: 'slugify' })).toBe("k");
-    expect(belLat("Л", { style: 'slugify' })).toBe("l");
-    expect(belLat("М", { style: 'slugify' })).toBe("m");
-    expect(belLat("Н", { style: 'slugify' })).toBe("n");
-    expect(belLat("О", { style: 'slugify' })).toBe("o");
-    expect(belLat("П", { style: 'slugify' })).toBe("p");
-    expect(belLat("Р", { style: 'slugify' })).toBe("r");
-    expect(belLat("С", { style: 'slugify' })).toBe("s");
-    expect(belLat("Т", { style: 'slugify' })).toBe("t");
-    expect(belLat("У", { style: 'slugify' })).toBe("u");
-    expect(belLat("Ў", { style: 'slugify' })).toBe("u");
-    expect(belLat("Ф", { style: 'slugify' })).toBe("f");
-    expect(belLat("Х", { style: 'slugify' })).toBe("ch");
-    expect(belLat("Ц", { style: 'slugify' })).toBe("c");
-    expect(belLat("Ч", { style: 'slugify' })).toBe("c");
-    expect(belLat("Ш", { style: 'slugify' })).toBe("s");
-    expect(belLat("Ы", { style: 'slugify' })).toBe("y");
-    expect(belLat("Э", { style: 'slugify' })).toBe("e");
-    expect(belLat("Ю", { style: 'slugify' })).toBe("ju");
-    expect(belLat("Я", { style: 'slugify' })).toBe("ja");
-  });
-
-  test('Creates a slug with dashes', () => {
-    expect(belLat("прывітанне, сусвет", { style: 'slugify' })).toBe("pryvitannie-susviet");
-  });
-});
-
 describe('Misc', () => {
   test('Throws a type error if wrong data type is provided', () => {
     expect(() => { belLat(1) }).toThrow(TypeError);
@@ -458,7 +423,7 @@ describe('Misc', () => {
 
   test('Allows basic custom replacements', () => {
     expect(belLat("№", {
-      customReplacements: [['№', { regular: '#' }] ]
+      customReplacements: [['№', ['#']] ]
     })).toBe("#");
   });
 

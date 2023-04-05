@@ -1,6 +1,6 @@
 # belLat
 
-Convert cyrillic Belarusian characters to Latin characters using transliteration. Can transliterate in accordance with the ["Instruction on transliteration of geographical names"](https://en.wikipedia.org/wiki/Instruction_on_transliteration_of_Belarusian_geographical_names_with_letters_of_Latin_script) or in accordance with the rules of the [Belarusian Latin alphabet (Łacinka)](https://en.wikipedia.org/wiki/Belarusian_Latin_alphabet). Can slugify the resulted transliterated string.
+Convert cyrillic Belarusian characters to Latin characters using transliteration. Can transliterate in accordance with the ["Instruction on transliteration of geographical names"](https://en.wikipedia.org/wiki/Instruction_on_transliteration_of_Belarusian_geographical_names_with_letters_of_Latin_script) (2000 and 2023) or in accordance with the rules of the [Belarusian Latin alphabet (Łacinka)](https://en.wikipedia.org/wiki/Belarusian_Latin_alphabet).
 
 ## Installation
 
@@ -28,22 +28,13 @@ belLat('Лацінка', { style: 'lacinka' }); // Łacinka
 
 ## Instruction for geographical names
 
-You can specify conversion in accordance with the instruction for geographical names, e.g.
+You can specify conversion in accordance with the instructions for geographical names (2000 and 2023), e.g.
 
 ```javascript
 import belLat from '@skip405/bel-lat';
 
-belLat('Лацінка', { style: 'geographical' }); // Lacinka
-```
-
-## Creating slugs
-
-The package uses the wonderful [@sindresorhus/slugify](https://github.com/sindresorhus/slugify) package to create slugified strings after conversion.
-
-```javascript
-import belLat from '@skip405/bel-lat';
-
-belLat("прывітанне, сусвет", { style: 'slugify' }); // pryvitannie-susviet
+belLat('Шчучыншчына', { style: 'geo-2000' }); // Ščučynščyna
+belLat('Шчучыншчына', { style: 'geo-2023' }); // Shchuchynshchyna
 ```
 
 ## Basic replacements
@@ -54,7 +45,7 @@ The package allows to specify own replacement symbols.
 import belLat from '@skip405/bel-lat';
 
 belLat("№", {
-  customReplacements: [ ['№', { regular: '#' }] ]
+  customReplacements: [ ['№', ['#']] ]
 }); // #
 ```
 

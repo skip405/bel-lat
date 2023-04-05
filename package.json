@@ -1,11 +1,11 @@
 {
   "name": "@skip405/bel-lat",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/skip405/bel-lat.git"
   },
-  "description": "Convert cyrillic Belarusian characters to Latin characters using transliteration. Can transliterate in accordance with the \"Instruction on transliteration of geographical names\" or in accordance with the rules of the Belarusian Latin alphabet (Łacinka). Can slugify the resulted transliterated string.",
+  "description": "Convert cyrillic Belarusian characters to Latin characters using transliteration. Can transliterate in accordance with the \"Instruction on transliteration of geographical names\" or in accordance with the rules of the Belarusian Latin alphabet (Łacinka).",
   "exports": "./index.js",
   "main": "index.js",
   "scripts": {
@@ -15,8 +15,8 @@
     "node": ">=12"
   },
   "bugs": {
-    "url" : "https://github.com/skip405/bel-lat/issues",
-    "email" : "skip405@gmail.com"
+    "url": "https://github.com/skip405/bel-lat/issues",
+    "email": "skip405@gmail.com"
   },
   "files": [
     "LICENSE.md",
@@ -48,10 +48,7 @@
     "transform": {}
   },
   "license": "MIT",
-  "dependencies": {
-    "@sindresorhus/slugify": "^2.1.1"
-  },
   "devDependencies": {
-    "jest": "^29.3.1"
+    "jest": "^29.5.0"
   }
 }
