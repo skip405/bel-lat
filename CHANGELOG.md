@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.0.1 - 2023-05-04
+
+### Changed
+
+- Conversion of `л` and `е`, `ё`, `ю`, `я` after it for lacinka style
+
 ## v2.0.0 - 2023-04-05
 
 ### Changed
