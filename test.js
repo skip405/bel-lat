@@ -392,18 +392,22 @@ describe('Special cases', () => {
         expect(belLat("Л", { style: 'lacinka' })).toBe("Ł");
       });
 
-      test('Renders without a dash sign before Е, Ё, Ю, Я, Ь', () => {
-        expect(belLat("ле", { style: 'lacinka' })).toBe("lie");
-        expect(belLat("лё", { style: 'lacinka' })).toBe("lio");
-        expect(belLat("лю", { style: 'lacinka' })).toBe("liu");
-        expect(belLat("ля", { style: 'lacinka' })).toBe("lia");
+      test('Renders without a dash sign before Е, Ё, Ю, І, Л, Я, Ь', () => {
+        expect(belLat("ле", { style: 'lacinka' })).toBe("le");
+        expect(belLat("лё", { style: 'lacinka' })).toBe("lo");
+        expect(belLat("лю", { style: 'lacinka' })).toBe("lu");
+        expect(belLat("ля", { style: 'lacinka' })).toBe("la");
         expect(belLat("ль", { style: 'lacinka' })).toBe("l");
+        expect(belLat("лі", { style: 'lacinka' })).toBe("li");
+        expect(belLat("лле", { style: 'lacinka' })).toBe("lle");
 
-        expect(belLat("Ле", { style: 'lacinka' })).toBe("Lie");
-        expect(belLat("Лё", { style: 'lacinka' })).toBe("Lio");
-        expect(belLat("Лю", { style: 'lacinka' })).toBe("Liu");
-        expect(belLat("Ля", { style: 'lacinka' })).toBe("Lia");
+        expect(belLat("Ле", { style: 'lacinka' })).toBe("Le");
+        expect(belLat("Лё", { style: 'lacinka' })).toBe("Lo");
+        expect(belLat("Лю", { style: 'lacinka' })).toBe("Lu");
+        expect(belLat("Ля", { style: 'lacinka' })).toBe("La");
         expect(belLat("Ль", { style: 'lacinka' })).toBe("L");
+        expect(belLat("Лі", { style: 'lacinka' })).toBe("Li");
+        expect(belLat("Лле", { style: 'lacinka' })).toBe("Lle");
       });
     });
   });

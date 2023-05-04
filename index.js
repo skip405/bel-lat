@@ -18,7 +18,7 @@ const processSpecialCase = (char, nextChar, prevChar, style, replacement) => {
           index = 0;
         }
       } else if( 'lacinka' === style ) {
-        if( ['е', 'ё', 'ю', 'я', 'ь'].includes(nextChar.toLowerCase()) ) {
+        if( ['е', 'ё', 'і', 'л', 'ю', 'я', 'ь'].includes(nextChar.toLowerCase()) ) {
           index = 0;
         } else {
           index = 1;
@@ -32,6 +32,8 @@ const processSpecialCase = (char, nextChar, prevChar, style, replacement) => {
     case 'я' :
       if( ['а', 'і', 'о', 'у', 'ы', 'ў', 'э', 'ь', '’', '‘'].includes(prevChar.toLowerCase()) || '' === prevChar ) {
         index = 1;
+      } else if( ['л'].includes(prevChar.toLowerCase()) && 'lacinka' === style ) {
+        index = 2;
       }
 
       break;
@@ -112,8 +114,8 @@ export default function belLat(string, options) {
     ['г', ['h', 'g']],
     ['ґ', ['g']],
     ['д', ['d']],
-    ['е', ['ie', 'je']],
-    ['ё', ['io', 'jo']],
+    ['е', ['ie', 'je', 'e']],
+    ['ё', ['io', 'jo', 'o']],
     ['ж', ['z', 'ž', 'zh']],
     ['з', ['z', 'ź']],
     ['і', ['i']],
@@ -137,8 +139,8 @@ export default function belLat(string, options) {
     ['ь', '_omitted'],
     ['ы', ['y']],
     ['э', ['e']],
-    ['ю', ['iu', 'ju']],
-    ['я', ['ia', 'ja']],
+    ['ю', ['iu', 'ju', 'u']],
+    ['я', ['ia', 'ja', 'a']],
     ['’', '_omitted'],
     ['‘', '_omitted'],
     ...options.customReplacements
